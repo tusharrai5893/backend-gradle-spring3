@@ -1,6 +1,7 @@
 package com.reddit.backend.dto;
 
 import com.reddit.backend.models.VoteType;
+import jakarta.persistence.Enumerated;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,6 +13,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class VoteDto {
 
+    @Enumerated
     private VoteType voteType;
     private Long postId;
 

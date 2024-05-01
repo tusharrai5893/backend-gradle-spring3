@@ -2,7 +2,7 @@ package com.reddit.backend.controllers;
 
 import com.reddit.backend.dto.SubredditDto;
 import com.reddit.backend.service.SubredditService;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,7 +13,7 @@ import static org.springframework.http.ResponseEntity.status;
 
 @RestController
 @RequestMapping("api/subreddit")
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class SubredditController {
 
     private final SubredditService subredditService;

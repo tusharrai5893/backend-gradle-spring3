@@ -37,7 +37,7 @@ public class Subreddit implements Serializable {
     @NotBlank(message = "Subreddit name is required")
     private String subredditName;
 
-    @NotBlank(message = "Subreddit Description is Required")
+    //    @NotBlank(message = "Subreddit Description is Required")
     private String subredditDescription;
 
     @ManyToOne(fetch = FetchType.LAZY)

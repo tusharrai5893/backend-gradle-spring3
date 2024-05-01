@@ -112,7 +112,7 @@ public class AuthService {
             user.setEnabled(true);
             userRepo.save(user);
         } catch (Exception e) {
-            e.printStackTrace();
+            e.getMessage();
 
         }
 

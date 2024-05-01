@@ -26,6 +26,7 @@ public class JwtProviderService {
     //Secret pass for jks file
     private static final String SECRET = "secret";
     private KeyStore keyStore;
+
     @Getter
     @Value("${jwt.expire.time}")
     private long jwtExpirationTimeInMillis;

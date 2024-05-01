@@ -1,14 +1,12 @@
 package com.reddit.backend.mailConfig;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import org.springframework.stereotype.Service;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
-@Service
-@AllArgsConstructor
-@Builder
+@Component
+@RequiredArgsConstructor
 public class CustomMailContentBuilder {
 
     private final TemplateEngine templateEngine;
