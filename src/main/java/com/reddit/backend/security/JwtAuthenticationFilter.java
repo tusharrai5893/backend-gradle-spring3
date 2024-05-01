@@ -1,5 +1,6 @@
 package com.reddit.backend.security;
 
+import com.reddit.backend.exceptions.RedditCustomException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -16,6 +17,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
@@ -43,7 +45,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             // Extracting Username from UserDetails from its serviceImpl , adding it to Context
 
             if (StringUtils.hasText(jwtFromComingRequest) && validateJwtToken) {
-                String usernameFromJwt = jwtProviderService.getUsernameFromJwt(jwtFromComingRequest);
+                String usernameFromJwt = Optional.of(jwtProviderService.getUsernameFromJwt(jwtFromComingRequest))
+                        .orElseThrow(() -> new RedditCustomException("Error in getting username from JWT"));
                 UserDetails userDetails = userDetailsService.loadUserByUsername(usernameFromJwt);
 
                 UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(

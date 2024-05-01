@@ -76,7 +76,7 @@ public class JwtProviderService {
         try {
             Jws<Claims> isValidated = Jwts.parser().setSigningKey(getPublicKey()).build().parseSignedClaims(JwtToken);
         } catch (JwtException e) {
-            System.err.print("error while parsing jwt token");
+            throw new RedditCustomException(e.getLocalizedMessage());
         }
         return true;
 

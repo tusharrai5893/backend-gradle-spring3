@@ -15,6 +15,7 @@ import com.reddit.backend.repository.VerificationTokenRepo;
 import com.reddit.backend.security.JwtProviderService;
 import com.reddit.backend.security.UserDetailsImpl;
 import lombok.AllArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -22,6 +23,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.TransactionException;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
@@ -69,9 +71,9 @@ public class AuthService {
             ));
 
 
-        } catch (Exception e) {
-            System.out.println("in catch block");
-            e.getLocalizedMessage();
+        } catch (TransactionException e) {
+            ResponseEntity.status(400).body(e.getLocalizedMessage());
+            throw new RedditCustomException(e.getMessage());
 
         }
 
@@ -99,8 +101,6 @@ public class AuthService {
 
         // get the user and make him enabled
         getUserAndEnabled(tokenString.get());
-
-
     }
 
 
@@ -115,8 +115,6 @@ public class AuthService {
             e.getMessage();
 
         }
-
-
     }
 
     public JwtAuthResDto login(LoginRequestDto loginRequestDto) {

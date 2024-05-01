@@ -63,9 +63,9 @@ class SecurityConfig {
         http
                 .cors(Customizer.withDefaults())
                 .csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(req ->
-                        req.requestMatchers(
-                                        "/api/auth/**",
+                .authorizeHttpRequests(req -> req
+                                .requestMatchers("/api/auth/**").permitAll()
+                                .requestMatchers(
                                         "/v2/api-docs",
                                         "/v3/api-docs",
                                         "/v3/api-docs/**",
@@ -77,6 +77,7 @@ class SecurityConfig {
                                         "/webjars/**",
                                         "/swagger-ui.html"
                                 ).permitAll()
+//                        .requestMatchers(HttpMethod.GET, "/api/subreddit/**").authenticated()
                                 .anyRequest()
                                 .authenticated()
                 )
