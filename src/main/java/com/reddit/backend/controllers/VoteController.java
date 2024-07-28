@@ -1,6 +1,6 @@
 package com.reddit.backend.controllers;
 
-import com.reddit.backend.dto.VoteDto;
+import com.reddit.backend.domain.VoteDto;
 import com.reddit.backend.service.VoteService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;

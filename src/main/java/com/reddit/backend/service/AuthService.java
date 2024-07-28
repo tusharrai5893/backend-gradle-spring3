@@ -1,10 +1,10 @@
 package com.reddit.backend.service;
 
-import com.reddit.backend.config.AppConfig;
-import com.reddit.backend.dto.JwtAuthResDto;
-import com.reddit.backend.dto.LoginRequestDto;
-import com.reddit.backend.dto.RefreshTokenRequestDto;
-import com.reddit.backend.dto.RegisterRequestDto;
+import com.reddit.backend.config.Application;
+import com.reddit.backend.domain.JwtAuthResDto;
+import com.reddit.backend.domain.LoginRequestDto;
+import com.reddit.backend.domain.RefreshTokenRequestDto;
+import com.reddit.backend.domain.RegisterRequestDto;
 import com.reddit.backend.exceptions.RedditCustomException;
 import com.reddit.backend.mailConfig.MailService;
 import com.reddit.backend.mailConfig.NotificationEmail;
@@ -44,7 +44,7 @@ public class AuthService {
     private final RefreshTokenService refreshTokenService;
 
     private final AuthenticationManager authenticationManager;
-    private final AppConfig appConfig;
+    private final Application appConfig;
 
 
     @Transactional

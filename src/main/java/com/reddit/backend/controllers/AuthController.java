@@ -1,9 +1,9 @@
 package com.reddit.backend.controllers;
 
-import com.reddit.backend.dto.JwtAuthResDto;
-import com.reddit.backend.dto.LoginRequestDto;
-import com.reddit.backend.dto.RefreshTokenRequestDto;
-import com.reddit.backend.dto.RegisterRequestDto;
+import com.reddit.backend.domain.JwtAuthResDto;
+import com.reddit.backend.domain.LoginRequestDto;
+import com.reddit.backend.domain.RefreshTokenRequestDto;
+import com.reddit.backend.domain.RegisterRequestDto;
 import com.reddit.backend.service.AuthService;
 import com.reddit.backend.service.RefreshTokenService;
 import jakarta.validation.Valid;
@@ -50,7 +50,7 @@ public class AuthController {
     @PostMapping(value = "/logout")
     public ResponseEntity<String> logout(@Valid @RequestBody RefreshTokenRequestDto refreshTokenRequestDto) {
         refreshTokenService.deleteRefreshToken(refreshTokenRequestDto.getRefreshToken());
-        return ResponseEntity.status(200).body("Refresh Token Deleted");
+        return ResponseEntity.status(200).body("Sorry to see you have been logged out.");
     }
 
 

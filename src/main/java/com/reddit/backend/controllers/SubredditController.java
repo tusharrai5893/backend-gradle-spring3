@@ -1,6 +1,6 @@
 package com.reddit.backend.controllers;
 
-import com.reddit.backend.dto.SubredditDto;
+import com.reddit.backend.domain.SubredditDto;
 import com.reddit.backend.service.SubredditService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

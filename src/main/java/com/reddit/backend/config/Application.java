@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 @EnableConfigurationProperties
 @Data
 @ConfigurationProperties(prefix = "app")
-public class AppConfig {
+public class Application {
 
     @NotNull
     private String url;

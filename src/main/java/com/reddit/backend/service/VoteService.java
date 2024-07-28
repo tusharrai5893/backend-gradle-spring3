@@ -1,6 +1,6 @@
 package com.reddit.backend.service;
 
-import com.reddit.backend.dto.VoteDto;
+import com.reddit.backend.domain.VoteDto;
 import com.reddit.backend.exceptions.RedditCustomException;
 import com.reddit.backend.mapper.VoteMapper;
 import com.reddit.backend.models.Post;

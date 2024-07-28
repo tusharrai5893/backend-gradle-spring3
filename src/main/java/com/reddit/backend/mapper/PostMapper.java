@@ -1,8 +1,8 @@
 package com.reddit.backend.mapper;
 
 import com.github.marlonlom.utilities.timeago.TimeAgo;
-import com.reddit.backend.dto.PostReqDto;
-import com.reddit.backend.dto.PostResDto;
+import com.reddit.backend.domain.PostReqDto;
+import com.reddit.backend.domain.PostResDto;
 import com.reddit.backend.models.Comment;
 import com.reddit.backend.models.Post;
 import com.reddit.backend.models.Subreddit;

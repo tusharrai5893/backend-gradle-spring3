@@ -1,4 +1,4 @@
-package com.reddit.backend.dto;
+package com.reddit.backend.domain;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;

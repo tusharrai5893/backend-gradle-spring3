@@ -1,4 +1,4 @@
-package com.reddit.backend.dto;
+package com.reddit.backend.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

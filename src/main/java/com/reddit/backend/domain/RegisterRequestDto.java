@@ -1,14 +1,15 @@
-package com.reddit.backend.dto;
+package com.reddit.backend.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@AllArgsConstructor
 @Data
+@AllArgsConstructor
 @NoArgsConstructor
-public class LoginRequestDto {
+public class RegisterRequestDto {
 
+    private String email;
     private String username;
     private String password;
 }

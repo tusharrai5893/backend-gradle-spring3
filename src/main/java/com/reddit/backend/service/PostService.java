@@ -1,7 +1,7 @@
 package com.reddit.backend.service;
 
-import com.reddit.backend.dto.PostReqDto;
-import com.reddit.backend.dto.PostResDto;
+import com.reddit.backend.domain.PostReqDto;
+import com.reddit.backend.domain.PostResDto;
 import com.reddit.backend.exceptions.RedditCustomException;
 import com.reddit.backend.mapper.PostMapper;
 import com.reddit.backend.models.Post;

@@ -1,4 +1,4 @@
-package com.reddit.backend.dto;
+package com.reddit.backend.domain;
 
 import com.reddit.backend.models.VoteType;
 import jakarta.persistence.Enumerated;

@@ -1,6 +1,6 @@
 package com.reddit.backend.controllers;
 
-import com.reddit.backend.dto.CommentDto;
+import com.reddit.backend.domain.CommentDto;
 import com.reddit.backend.service.CommentService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;

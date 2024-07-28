@@ -1,8 +1,8 @@
 package com.reddit.backend.service;
 
 
-import com.reddit.backend.config.AppConfig;
-import com.reddit.backend.dto.CommentDto;
+import com.reddit.backend.config.Application;
+import com.reddit.backend.domain.CommentDto;
 import com.reddit.backend.exceptions.RedditCustomException;
 import com.reddit.backend.mailConfig.MailService;
 import com.reddit.backend.mailConfig.NotificationEmail;
@@ -34,7 +34,7 @@ public class CommentService {
     private final MailService mailService;
 
     private final CommentMapper commentMapper;
-    private final AppConfig appConfig;
+    private final Application appConfig;
 
 
     public void createComment(CommentDto commentDto) {

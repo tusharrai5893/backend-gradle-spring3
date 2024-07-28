@@ -1,6 +1,6 @@
 package com.reddit.backend.mapper;
 
-import com.reddit.backend.dto.VoteDto;
+import com.reddit.backend.domain.VoteDto;
 import com.reddit.backend.models.Post;
 import com.reddit.backend.models.User;
 import com.reddit.backend.models.Vote;

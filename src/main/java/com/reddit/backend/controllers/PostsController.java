@@ -1,7 +1,7 @@
 package com.reddit.backend.controllers;
 
-import com.reddit.backend.dto.PostReqDto;
-import com.reddit.backend.dto.PostResDto;
+import com.reddit.backend.domain.PostReqDto;
+import com.reddit.backend.domain.PostResDto;
 import com.reddit.backend.mapper.PostMapper;
 import com.reddit.backend.models.Post;
 import com.reddit.backend.service.PostService;

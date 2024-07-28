@@ -1,6 +1,6 @@
 package com.reddit.backend.mapper;
 
-import com.reddit.backend.dto.SubredditDto;
+import com.reddit.backend.domain.SubredditDto;
 import com.reddit.backend.models.Post;
 import com.reddit.backend.models.Subreddit;
 import com.reddit.backend.models.User;

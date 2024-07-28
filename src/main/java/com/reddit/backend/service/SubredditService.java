@@ -1,6 +1,6 @@
 package com.reddit.backend.service;
 
-import com.reddit.backend.dto.SubredditDto;
+import com.reddit.backend.domain.SubredditDto;
 import com.reddit.backend.exceptions.RedditCustomException;
 import com.reddit.backend.mapper.SubredditMapper;
 import com.reddit.backend.models.Subreddit;
