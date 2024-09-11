@@ -20,6 +20,7 @@ import java.util.TreeSet;
 @Entity
 @ToString
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+@Cacheable
 public class Subreddit implements Serializable {
 
 

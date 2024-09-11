@@ -66,7 +66,7 @@ public class AuthService {
             mailService.sendMail(new NotificationEmail("Activation mail is sent, Please verify",
                     user.getEmail(),
                     "Please Activate your account by clicking on link",
-                    appConfig.getUrl() + "/api/auth/verifyAccount/" + randomToken,
+                    "http://" + appConfig.getUrl() + "/api/auth/verifyAccount/" + randomToken,
                     "Click the link to activate your account"
             ));
 

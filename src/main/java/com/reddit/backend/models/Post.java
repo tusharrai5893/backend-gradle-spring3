@@ -24,6 +24,7 @@ import java.util.TreeSet;
 @Entity
 @Builder
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+@Cacheable
 public class Post implements Serializable, Comparable<Post> {
 
     @Id

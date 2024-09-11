@@ -11,10 +11,11 @@ public class WebCorsConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOriginPatterns("*")
-                .allowedMethods("*")
-                .maxAge(3600L)
-                .allowedHeaders("*").exposedHeaders("Authorization")
-                .allowCredentials(true);
+                .allowedOriginPatterns("*") // Allow only the Angular app running on localhost:4200
+                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS") // Specify allowed HTTP methods
+                .allowedHeaders("*") // Allow all headers
+                .exposedHeaders("Authorization") // Expose Authorization header to the client
+                .allowCredentials(true) // Allow credentials (cookies, authorization headers)
+                .maxAge(3600L); // Cache pre-flight response for 1 hour
     }
 }

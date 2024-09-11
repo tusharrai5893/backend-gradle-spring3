@@ -17,6 +17,7 @@ import java.time.Instant;
 @NoArgsConstructor
 @Entity
 @Table(name = "reddit_users")
+@Cacheable
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class User {
 

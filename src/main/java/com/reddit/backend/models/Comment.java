@@ -23,6 +23,7 @@ import java.util.TreeSet;
 @Builder
 @Getter
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+@Cacheable
 public class Comment implements Serializable, Comparable<Comment> {
 
     @Id
