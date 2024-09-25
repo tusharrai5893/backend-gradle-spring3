@@ -49,7 +49,7 @@ public class AuthService {
 
     @Transactional
     public Optional<User> signup(RegisterRequestDto registerRequestDto) {
-        Optional<User> savedUser = null;
+        Optional<User> savedUser;
 
         try {
             User user = new User();
@@ -70,7 +70,7 @@ public class AuthService {
                     "Click the link to activate your account"
             ));
 
-
+            //throw new RuntimeException();
         } catch (TransactionException e) {
             ResponseEntity.status(400).body(e.getLocalizedMessage());
             throw new RedditCustomException(e.getMessage());
@@ -94,7 +94,6 @@ public class AuthService {
         return token;
     }
 
-    @Transactional
     public void mailVerifyAccount(String token) {
         Optional<VerificationToken> tokenString = verificationTokenRepo.findByTokenString(token);
         tokenString.orElseThrow(() -> new RedditCustomException("Invalid Token Fetched from Repo"));
@@ -103,18 +102,13 @@ public class AuthService {
         getUserAndEnabled(tokenString.get());
     }
 
-
-    private void getUserAndEnabled(VerificationToken tokenString) {
-        try {
-            String userName = tokenString.getUser().getUsername();
-            User user = userRepo.findByUsername(userName)
-                    .orElseThrow(() -> new RedditCustomException("User not found " + userName));
-            user.setEnabled(true);
-            userRepo.save(user);
-        } catch (Exception e) {
-            e.getMessage();
-
-        }
+    @Transactional
+    protected void getUserAndEnabled(VerificationToken tokenString) {
+        final var userName = tokenString.getUser().getUsername();
+        final var user = userRepo.findByUsername(userName)
+                .orElseThrow(() -> new RedditCustomException("User not found " + userName));
+        user.setEnabled(true);
+        userRepo.save(user);
     }
 
     public JwtAuthResDto login(LoginRequestDto loginRequestDto) {
