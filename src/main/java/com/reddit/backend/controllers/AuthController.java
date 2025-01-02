@@ -8,6 +8,7 @@ import com.reddit.backend.service.AuthService;
 import com.reddit.backend.service.RefreshTokenService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/auth")
 @RestController
 @RequiredArgsConstructor
+@Slf4j
 public class AuthController {
 
     private final AuthService authService;
@@ -50,6 +52,7 @@ public class AuthController {
     @PostMapping(value = "/logout")
     public ResponseEntity<String> logout(@Valid @RequestBody RefreshTokenRequestDto refreshTokenRequestDto) {
         refreshTokenService.deleteRefreshToken(refreshTokenRequestDto.getRefreshToken());
+        log.info("Logout Successfully");
         return ResponseEntity.status(200).body("Sorry to see you have been logged out.");
     }
 
