@@ -32,6 +32,7 @@ import java.util.UUID;
 
 @Service
 @AllArgsConstructor
+@Transactional
 public class AuthService {
 
     private final PasswordEncoder passwordEncoder;
@@ -47,7 +48,6 @@ public class AuthService {
     private final Application appConfig;
 
 
-    @Transactional
     public Optional<User> signup(RegisterRequestDto registerRequestDto) {
         Optional<User> savedUser;
 
@@ -102,7 +102,7 @@ public class AuthService {
         getUserAndEnabled(tokenString.get());
     }
 
-    @Transactional
+
     protected void getUserAndEnabled(VerificationToken tokenString) {
         final var userName = tokenString.getUser().getUsername();
         final var user = userRepo.findByUsername(userName)
