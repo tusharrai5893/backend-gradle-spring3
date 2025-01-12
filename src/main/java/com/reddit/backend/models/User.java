@@ -16,8 +16,7 @@ import java.time.Instant;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "reddit_users")
-@Cacheable
+@Table(name = "Customer")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class User {
 
@@ -34,7 +33,8 @@ public class User {
     private String password;
 
     @Email
-    @NotEmpty(message = "Email is mandatory")
+    @NotEmpty(message = "Email is required")
+    @Column(unique = true)
     private String email;
 
     private Boolean enabled;

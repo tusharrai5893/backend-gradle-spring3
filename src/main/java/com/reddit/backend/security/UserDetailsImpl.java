@@ -3,6 +3,7 @@ package com.reddit.backend.security;
 import com.reddit.backend.models.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,11 +13,10 @@ import java.util.Collections;
 
 
 @Data
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class UserDetailsImpl implements UserDetails {
 
-
-    private User user;
+    private final User user;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

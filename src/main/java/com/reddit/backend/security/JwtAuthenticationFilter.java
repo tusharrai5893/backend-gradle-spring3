@@ -24,38 +24,39 @@ import java.util.Optional;
 @Slf4j
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
+    public static final String AUTHORIZATION = "Authorization";
     private final JwtProviderService jwtProviderService;
     private final UserDetailsService userDetailsService;
 
     @Override
-    protected void doFilterInternal(HttpServletRequest httpServletRequest,
-                                    HttpServletResponse httpServletResponse,
+    protected void doFilterInternal(HttpServletRequest request,
+                                    HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
 
         //Parsing JWT from Oncoming Request
-        String jwtFromComingRequest = null;
-        String containBearerToken = httpServletRequest.getHeader("Authorization");
+        var authorization = request.getHeader(AUTHORIZATION);
 
-        if (null == containBearerToken || !StringUtils.hasText("containBearerToken")) {
-            filterChain.doFilter(httpServletRequest, httpServletResponse);
+        if (null == authorization || !StringUtils.hasText(AUTHORIZATION)) {
+            filterChain.doFilter(request, response);
         } else {
-            jwtFromComingRequest = containBearerToken.substring(7);
+            var jwtFromComingRequest = authorization.substring(7);
             // Validating Jwt with public key , getting certificate from it
             boolean validateJwtToken = jwtProviderService.validateJwtToken(jwtFromComingRequest);
             // Extracting Username from UserDetails from its serviceImpl , adding it to Context
 
             if (StringUtils.hasText(jwtFromComingRequest) && validateJwtToken) {
-                String usernameFromJwt = Optional.of(jwtProviderService.getUsernameFromJwt(jwtFromComingRequest))
-                        .orElseThrow(() -> new RedditCustomException("Error in getting username from JWT"));
-                UserDetails userDetails = userDetailsService.loadUserByUsername(usernameFromJwt);
+                var usernameFromJwt = Optional.of(jwtProviderService.getUsernameFromJwt(jwtFromComingRequest))
+                        .orElseThrow(() -> new RedditCustomException("Error in parsing JWT token in Filter"));
 
-                UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
+                var userDetails = userDetailsService.loadUserByUsername(usernameFromJwt);
+
+                var authenticationToken = new UsernamePasswordAuthenticationToken(
                         userDetails, null, userDetails.getAuthorities()
                 );
-                authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(httpServletRequest));
+                authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authenticationToken);
 
-                filterChain.doFilter(httpServletRequest, httpServletResponse);
+                filterChain.doFilter(request, response);
             }
         }//ends Else
     }
