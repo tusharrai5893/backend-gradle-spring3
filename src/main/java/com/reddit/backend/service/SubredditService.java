@@ -24,8 +24,8 @@ public class SubredditService {
 
     @Transactional
     public SubredditDto persistSubreddit(SubredditDto subredditDto) {
-
         User currentUser = authService.getCurrentUser();
+        subredditRepo.findBySubredditName(subredditDto.getSubredditName()).orElseThrow(() -> new RedditCustomException("SUBREDDIT ALREADY EXIST"));
         Subreddit persistedSubReddit = subredditRepo.save(subredditMapper.mapDTOToModel(subredditDto, currentUser));
         subredditDto.setSubredditId(persistedSubReddit.getSubredditId());
 

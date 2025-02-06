@@ -13,12 +13,12 @@ import com.reddit.backend.models.VerificationToken;
 import com.reddit.backend.repository.UserRepo;
 import com.reddit.backend.repository.VerificationTokenRepo;
 import com.reddit.backend.security.JwtProviderService;
-import com.reddit.backend.security.UserDetailsImpl;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -117,26 +117,26 @@ public class AuthService {
                 loginRequestDto.getPassword()
         ));
 
-        SecurityContextHolder.getContext().setAuthentication(authenticate);
+//        SecurityContextHolder.getContext().setAuthentication(authenticate);
+        SecurityContext context = SecurityContextHolder.createEmptyContext();
+        context.setAuthentication(authenticate);
+        SecurityContextHolder.setContext(context);
+
         String newToken = jwtProviderService.generateJWToken(authenticate);
         return JwtAuthResDto.builder()
                 .JwtToken(newToken)
                 .userName(loginRequestDto.getUsername())
                 .refreshToken(refreshTokenService.generateRefreshToken().getRToken())
-                .expiresAt(Instant.now().plusMillis(jwtProviderService.getJwtExpirationTimeInMillis()))
+//                .expiresAt(Instant.now().plusMillis(jwtProviderService.getJwtExpirationTimeInMillis()))
+//                .expiresAt(new java.util.Date(System.currentTimeMillis() + JwtProviderService.JWT_EXPIRATION_TIME_IN_MILLIS))
                 .build();
     }
 
     public User getCurrentUser() {
-
-        // Getting the logged in user (principal) from Security context  holder
-        UserDetailsImpl principal =
-                (UserDetailsImpl) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-        return userRepo.findByUsername(principal.getUsername())
-                .orElseThrow(() -> new UsernameNotFoundException("User not found with username - " + principal.getUsername()));
-
-
+        // Getting the logged in user (principal) from Security context holder
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return userRepo.findByUsername(user.getUsername())
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with username - " + user.getUsername()));
     }
 
     public JwtAuthResDto refreshToken(RefreshTokenRequestDto refreshTokenRequestDto) {
@@ -147,8 +147,14 @@ public class AuthService {
         return JwtAuthResDto.builder()
                 .JwtToken(tokenByUsername)
                 .refreshToken(refreshTokenRequestDto.getRefreshToken())
-                .expiresAt(Instant.now().plusMillis(jwtProviderService.getJwtExpirationTimeInMillis()))
+//                .expiresAt(new java.util.Date(System.currentTimeMillis() + JwtProviderService.JWT_EXPIRATION_TIME_IN_MILLIS))
                 .userName(refreshTokenRequestDto.getUsername())
                 .build();
+    }
+
+    public User deleteUser(String customerId) {
+        Optional<User> user = userRepo.findById(Long.valueOf(customerId));
+        userRepo.deleteById(user.get().getUserId());
+        return user.get();
     }
 }

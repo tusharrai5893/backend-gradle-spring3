@@ -25,13 +25,13 @@ public class SubredditController {
                 .body(subredditService.persistSubreddit(subredditDto));
     }
 
-    @GetMapping("fetchAll-subreddit")
+    @GetMapping("/fetchAll-subreddit")
     public ResponseEntity<List<SubredditDto>> fetchAll() {
         return status(HttpStatus.OK)
                 .body(subredditService.fetchAllSubreddit());
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/fetchAll-subreddit/{id}")
     public ResponseEntity<SubredditDto> getSubredditById(@PathVariable Long id) {
         return ResponseEntity
                 .status(HttpStatus.OK)

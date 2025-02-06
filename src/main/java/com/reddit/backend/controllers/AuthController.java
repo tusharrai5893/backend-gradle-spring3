@@ -4,6 +4,7 @@ import com.reddit.backend.domain.JwtAuthResDto;
 import com.reddit.backend.domain.LoginRequestDto;
 import com.reddit.backend.domain.RefreshTokenRequestDto;
 import com.reddit.backend.domain.RegisterRequestDto;
+import com.reddit.backend.models.User;
 import com.reddit.backend.service.AuthService;
 import com.reddit.backend.service.RefreshTokenService;
 import jakarta.validation.Valid;
@@ -41,7 +42,10 @@ public class AuthController {
 
     @PostMapping(value = "/login")
     public ResponseEntity<JwtAuthResDto> login(@RequestBody LoginRequestDto loginRequestDto) {
-        return ResponseEntity.ok(authService.login(loginRequestDto));
+        JwtAuthResDto res = authService.login(loginRequestDto);
+//        HttpHeaders headers = new HttpHeaders();
+//        headers.add("JWT_TOKEN", res.getJwtToken());
+        return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
     @PostMapping(value = "/refreshToken")
@@ -54,6 +58,12 @@ public class AuthController {
         refreshTokenService.deleteRefreshToken(refreshTokenRequestDto.getRefreshToken());
         log.info("Logout Successfully");
         return ResponseEntity.status(200).body("Sorry to see you have been logged out.");
+    }
+
+    @DeleteMapping("/delete/customer/{customerId}")
+    public ResponseEntity<String> deleteCustomer(@PathVariable String customerId) {
+        User user = authService.deleteUser(customerId);
+        return ResponseEntity.status(204).body(user.toString());
     }
 
 

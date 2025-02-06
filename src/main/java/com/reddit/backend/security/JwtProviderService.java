@@ -1,12 +1,11 @@
 package com.reddit.backend.security;
 
 import com.reddit.backend.exceptions.RedditCustomException;
+import com.reddit.backend.models.User;
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jws;
-import io.jsonwebtoken.JwtException;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import jakarta.annotation.PostConstruct;
-import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
@@ -15,10 +14,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.security.*;
 import java.security.cert.CertificateException;
-import java.sql.Date;
 import java.time.Instant;
-
-import static java.util.Date.from;
+import java.util.Date;
+import java.util.function.Function;
 
 @Service
 public class JwtProviderService {
@@ -28,9 +26,8 @@ public class JwtProviderService {
     public static final String SPRINGBLOG = "springblog";
     private KeyStore keyStore;
 
-    @Getter
     @Value("${jwt.expire.time}")
-    private long jwtExpirationTimeInMillis;
+    public long JWT_EXPIRATION_TIME_IN_MILLIS;
 
     @PostConstruct
     public void initKeyStore() {
@@ -43,13 +40,17 @@ public class JwtProviderService {
         }
     }
 
+    private <T> T extractClaims(String jwt, Function<Claims, T> claimsResolver) {
+        return claimsResolver.apply(claims(jwt));
+    }
+
     public String generateJWToken(Authentication authentication) {
-        UserDetailsImpl loggingUser = (UserDetailsImpl) authentication.getPrincipal();
+        User loggingUser = (User) authentication.getPrincipal();
         return Jwts.builder()
                 .subject(loggingUser.getUsername())
-                .issuedAt(from(Instant.now()))
+                .issuedAt(Date.from(Instant.now()))
                 .signWith(getPrivateKey())
-                .expiration(Date.from(Instant.now().plusMillis(jwtExpirationTimeInMillis)))
+                .expiration(Date.from(Instant.now().plusMillis(JWT_EXPIRATION_TIME_IN_MILLIS)))
                 .compact();
     }
 
@@ -57,28 +58,39 @@ public class JwtProviderService {
     public String generateRefreshJWToken(String userName) {
         return Jwts.builder()
                 .subject(userName)
-                .issuedAt(from(Instant.now()))
+                .issuedAt(Date.from(Instant.now()))
                 .signWith(getPrivateKey())
-                .expiration(Date.from(Instant.now().plusMillis(jwtExpirationTimeInMillis)))
+                .expiration(Date.from(Instant.now().plusMillis(JWT_EXPIRATION_TIME_IN_MILLIS)))
                 .compact();
     }
 
-    private PrivateKey getPrivateKey() {
+ /*   private SecretKey getPrivateKey() {
         try {
-            return (PrivateKey) keyStore.getKey(SPRINGBLOG, SECRET.toCharArray());
+            Key key = keyStore.getKey(SPRINGBLOG, SECRET.toCharArray());
+            return (SecretKey) key;
         } catch (KeyStoreException | NoSuchAlgorithmException | UnrecoverableKeyException e) {
             throw new RedditCustomException("Exception occurred while retrieving getPrivateKey from keystore " + e);
         }
+    }*/
+
+    private PrivateKey getPrivateKey() {
+        try {
+            Key key = keyStore.getKey(SPRINGBLOG, SECRET.toCharArray());
+            if (key instanceof PrivateKey) {
+                return (PrivateKey) key;
+            } else {
+                throw new RedditCustomException("Key retrieved from keystore is not a PrivateKey.");
+            }
+        } catch (KeyStoreException | NoSuchAlgorithmException | UnrecoverableKeyException e) {
+            throw new RedditCustomException("Exception occurred while retrieving PrivateKey from keystore: " + e.getMessage());
+        }
     }
 
-    public boolean validateJwtToken(String JwtToken) {
-        try {
-            Jws<Claims> isValidated = Jwts.parser().setSigningKey(getPublicKey()).build().parseSignedClaims(JwtToken);
-        } catch (JwtException e) {
-            throw new RedditCustomException(e.getLocalizedMessage());
-        }
-        return true;
-
+    public boolean isTokenExpired(String JwtToken) throws ExpiredJwtException {
+        Date expiration = extractClaims(JwtToken, Claims::getExpiration);
+        System.out.println("Token Expiration: " + expiration);
+        System.out.println("Current Time: " + Date.from(Instant.now()));
+        return expiration.after(Date.from(Instant.now()));
     }
 
     private PublicKey getPublicKey() {
@@ -89,10 +101,10 @@ public class JwtProviderService {
         }
     }
 
-    public String getUsernameFromJwt(String jwtToken) {
-        return Jwts.parser().setSigningKey(getPublicKey())
+    public Claims claims(String jwtToken) {
+        return Jwts.parser().verifyWith(getPublicKey())
                 .build().parseSignedClaims(jwtToken)
-                .getBody().getSubject();
+                .getPayload();
     }
 
 }

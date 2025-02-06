@@ -5,7 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.Instant;
+import java.util.Date;
 
 @Data
 @AllArgsConstructor
@@ -19,6 +19,6 @@ public class JwtAuthResDto {
     //New fields for refresh token
 
     private String refreshToken;
-    private Instant expiresAt;
+    private Date expiresAt;
 
 }

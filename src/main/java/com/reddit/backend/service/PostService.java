@@ -61,7 +61,6 @@ public class PostService {
                 .collect(toList());
     }
 
-    @Transactional(readOnly = true)
     public PostResDto fetchOnePost(Long postId) {
         Post post = postRepo.findById(postId)
                 .orElseThrow(() -> new RedditCustomException(new StringBuilder().append("No post found for the id=").append(postId).toString()));

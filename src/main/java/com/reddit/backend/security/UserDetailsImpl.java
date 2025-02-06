@@ -2,7 +2,7 @@ package com.reddit.backend.security;
 
 import com.reddit.backend.models.User;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -11,26 +11,24 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.Collections;
 
-
-@Data
 @RequiredArgsConstructor
-public class UserDetailsImpl implements UserDetails {
+public class UserDetailsImpl extends User implements UserDetails {
 
-    private final User user;
+    public static final String ROLE_USER = "ROLE_USER";
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singletonList(new SimpleGrantedAuthority("USER"));
+        return Collections.singletonList(new SimpleGrantedAuthority(ROLE_USER));
     }
 
     @Override
     public String getPassword() {
-        return user.getPassword();
+        return super.getPassword();
     }
 
     @Override
     public String getUsername() {
-        return user.getUsername();
+        return super.getUsername();
     }
 
     @Override
@@ -50,6 +48,6 @@ public class UserDetailsImpl implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return user.getEnabled();
+        return super.getEnabled();
     }
 }

@@ -1,13 +1,13 @@
 package com.reddit.backend.config;
 
-import com.reddit.backend.security.JwtAuthenticationFilter;
+import com.reddit.backend.exceptions.GlobalExceptionController;
+import com.reddit.backend.security.JTokenOPRFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -27,7 +27,7 @@ import static org.springframework.security.config.Customizer.withDefaults;
 class Security {
 
     private final UserDetailsService userDetailsService;
-    private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final JTokenOPRFilter JTokenOPRFilter;
 
     @Bean //(BeanIds.AUTHENTICATION_MANAGER)
     public AuthenticationManager authenticationManagerBean(AuthenticationConfiguration configuration) throws Exception {
@@ -85,7 +85,10 @@ class Security {
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(daoAuthenticationProvider())
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+//                .authenticationProvider(daoAuthenticationProvider())
+                .exceptionHandling(exception ->
+                        exception.authenticationEntryPoint(new GlobalExceptionController()))
+                .addFilterBefore(JTokenOPRFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
